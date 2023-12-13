@@ -2,14 +2,12 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-// chakra imports
-import { Box, Flex, HStack, Text, useColorModeValue } from '@chakra-ui/react';
-import { useAuth } from '~/guards/context';
+
+import { Box, Flex, HStack, Text, useColorModeValue } from '@chakra-ui/react'
 
 export function SidebarLinks(props: {
   routes: RoutesType[];
 }) {
-  const { user } = useAuth()
 
   let location = useLocation();
   let activeColor = useColorModeValue('gray.700', 'white');
