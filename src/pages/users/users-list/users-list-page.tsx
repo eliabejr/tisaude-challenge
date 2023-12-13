@@ -1,6 +1,6 @@
 // libraries
 import React, { useEffect, useState } from 'react'
-import { Avatar, Button, Flex, Icon, Skeleton, Stack, Text } from '@chakra-ui/react'
+import { Avatar, Button, Flex, Icon, Skeleton, Stack, Text, useToast } from '@chakra-ui/react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { MdPerson, MdStar } from 'react-icons/md'
@@ -19,6 +19,7 @@ const UsersListPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const navigate = useNavigate()
+  const toast = useToast()
 
   // use effects
   useEffect(() => {
@@ -30,7 +31,11 @@ const UsersListPage = () => {
       loadUsers()
       setIsLoading(false)
     } catch (error) {
-      console.log(error)
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      })
       setIsLoading(false)
     }
   }, []);

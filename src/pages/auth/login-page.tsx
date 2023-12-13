@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { Box, Button, Checkbox, Flex, FormControl, FormLabel, Heading, Icon, Input, InputGroup, InputRightElement, Text, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, Checkbox, Flex, FormControl, FormLabel, Heading, Icon, Input, InputGroup, InputRightElement, Text, useColorModeValue, useToast } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from "~/guards/context";
@@ -21,6 +21,7 @@ const LoginPage = () => {
   const { signin } = useContext(AuthContext);
 
   const navigate = useNavigate()
+  const toast = useToast()
 
   const [info, setInfo] = useState<ILogin>(loginInfo);
   const [errorLogin, setErrorLogin] = useState<string | null>(null);
@@ -56,7 +57,11 @@ const LoginPage = () => {
         } else {
           setErrorLogin('Ocorreu um erro, tente fazer login novamente.');
         }
-        console.log(errorLogin)
+        toast({
+          title: errorLogin,
+          status: 'error',
+          isClosable: true,
+        })
         setLoading(false);
       });
   }
@@ -130,7 +135,7 @@ const LoginPage = () => {
                   fontSize='sm'
                   ms={{ base: "0px", md: "0px" }}
                   type='email'
-                  placeholder='john@mail.com'
+                  placeholder='user@mail.com'
                   mb='24px'
                   fontWeight='500'
                   size='lg'

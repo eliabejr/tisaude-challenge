@@ -16,9 +16,10 @@ import {
 import SidebarContent from './sidebar-content';
 
 import { IoMenuOutline } from 'react-icons/io5';
+import { IUser } from '~/interfaces/user';
 
-function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
-  const { routes } = props;
+function Sidebar(props: { user: IUser, routes: RoutesType[];[x: string]: any }) {
+  const { routes, user } = props;
 
   let variantChange = '0.2s linear';
   let shadow = useColorModeValue('14px 17px 40px 4px rgba(112, 144, 176, 0.08)', 'unset');
@@ -36,19 +37,19 @@ function Sidebar(props: { routes: RoutesType[];[x: string]: any }) {
         minH='100%'
         overflowX='hidden'
         boxShadow={shadow}>
-        <SidebarContent routes={routes} />
+        <SidebarContent user={user} routes={routes} />
       </Box>
     </Box>
   );
 }
 
-export function SidebarResponsive(props: { routes: RoutesType[] }) {
+export function SidebarResponsive(props: { user: IUser, routes: RoutesType[] }) {
   let sidebarBackgroundColor = useColorModeValue('white', 'blackAlpha.800');
   let menuColor = useColorModeValue('gray.400', 'white');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
-  const { routes } = props;
+  const { routes, user } = props;
 
   return (
     <Flex display={{ sm: 'flex', xl: 'none' }} alignItems='center'>
@@ -77,7 +78,7 @@ export function SidebarResponsive(props: { routes: RoutesType[] }) {
             _hover={{ boxShadow: 'none' }}
           />
           <DrawerBody maxW='285px' px='0rem' pb='0'>
-            <SidebarContent routes={routes} />
+            <SidebarContent user={user} routes={routes} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

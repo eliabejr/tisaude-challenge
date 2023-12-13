@@ -38,7 +38,11 @@ const ProductEditPage = () => {
     try {
       loadCategories()
     } catch (error) {
-      console.log(error)
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      })
     }
   }, []);
 

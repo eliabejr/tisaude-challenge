@@ -34,7 +34,11 @@ const UserViewPage = () => {
       loadUser()
       setIsLoading(false)
     } catch (error) {
-      console.log(error)
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      })
       setIsLoading(false)
     }
   }, []);

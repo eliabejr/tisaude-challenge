@@ -20,7 +20,6 @@ const FileUploadPage = () => {
 
   // functions
   const uploadFile = async (file: any) => {
-    console.log(file)
     const config = {
       headers: {
         accept: '*/*',

@@ -1,6 +1,7 @@
 // libraries
 import React, { useEffect, useState } from 'react'
-import { Button, Flex, Input, Menu, MenuButton, MenuItem, MenuList, SimpleGrid, Skeleton } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
+import { Button, Flex, Input, Menu, MenuButton, MenuItem, MenuList, SimpleGrid, Skeleton, useToast } from '@chakra-ui/react'
 import axios from 'axios'
 
 // components
@@ -9,16 +10,20 @@ import ProductCard from '~/components/product-card'
 
 import { endpoints } from '~/services/api'
 import { IProduct, IProductCategory, IProductOptions } from '~/interfaces/product'
-import { useNavigate } from 'react-router-dom'
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { useAuth } from '~/guards/context'
 
 const ProductsList = () => {
+  const { user } = useAuth()
+  console.log(user)
+
   const [products, setProducts] = useState<IProduct[]>([])
   const [categories, setCategories] = useState<IProductCategory[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [options, setOptions] = useState<IProductOptions>()
 
   const navigate = useNavigate()
+  const toast = useToast
 
   // use effects
   useEffect(() => {
@@ -46,7 +51,11 @@ const ProductsList = () => {
       loadProducts()
       setIsLoading(false)
     } catch (error) {
-      console.log(error)
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      })
       setIsLoading(false)
     }
   }, [options]);
@@ -59,7 +68,11 @@ const ProductsList = () => {
     try {
       loadCategories()
     } catch (error) {
-      console.log(error)
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      })
     }
   }, []);
 
@@ -144,17 +157,19 @@ const ProductsList = () => {
               </>
             )}
           </Menu>
-          <Button colorScheme='brand' variant='solid' onClick={() => navigate('/produtos/novo')}>
-            Novo Produto
-          </Button>
+          {user.role === 'admin' && (
+            <Button colorScheme='brand' variant='solid' onClick={() => navigate('/produtos/novo')}>
+              Novo Produto
+            </Button>
+          )}
         </Flex>
       }>
         <SimpleGrid columns={{ base: 2, md: 3, lg: 4, '2xl': 6 }} gap='20px' mb='20px'>
           {products && products.map((product) => {
 
             return (
-              <Skeleton isLoaded={!isLoading}>
-                <ProductCard images={product.images} id={product.id} title={product.title} price={product.price} category={product.category} description={product.description} />
+              <Skeleton isLoaded={!isLoading} key={`${product.title}-${product.id}`}>
+                <ProductCard key={`${product.title}-${product.id}`} images={product.images} id={product.id} title={product.title} price={product.price} category={product.category} description={product.description} />
               </Skeleton>
             )
           })}

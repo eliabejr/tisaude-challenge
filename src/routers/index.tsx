@@ -5,7 +5,7 @@ import { MdAllInbox, MdFileCopy, MdPeople } from 'react-icons/md';
 const adminRoutes = [
   {
     name: 'Produtos',
-    roles: ['admin'],
+    roles: ['admin', 'customer'],
     group: 'Administrativo',
     path: '/produtos',
     icon: <Icon as={MdAllInbox} width='20px' height='20px' color='inherit' />,
@@ -19,7 +19,7 @@ const adminRoutes = [
   },
   {
     name: 'Arquivos',
-    roles: ['admin'],
+    roles: ['admin', 'customer'],
     group: 'Administrativo',
     path: '/upload',
     icon: <Icon as={MdFileCopy} width='20px' height='20px' color='inherit' />,

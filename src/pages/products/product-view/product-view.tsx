@@ -2,6 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Flex, Image, SimpleGrid, Skeleton, useDisclosure, useToast } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { lightFormat } from 'date-fns';
+import { IoTrashBin } from 'react-icons/io5';
+import { MdEdit } from 'react-icons/md';
 
 import DashboardLayout from '~/components/layout'
 import { H3 } from '~/components/typography';
@@ -10,13 +14,11 @@ import Panel from '~/components/panel';
 import { normalizeDate } from '~/utils/date';
 import { IProduct } from '~/interfaces/product';
 import { endpoints } from '~/services/api';
-import axios from 'axios';
-import { lightFormat } from 'date-fns';
-import { IoTrashBin } from 'react-icons/io5';
-import { MdEdit } from 'react-icons/md';
+import { useAuth } from '~/guards/context';
 
 const ProductViewPage = () => {
   const { productId } = useParams()
+  const { user } = useAuth()
 
   const [product, setProduct] = useState<IProduct>()
   const [isLoading, setIsLoading] = useState(true)
@@ -36,7 +38,11 @@ const ProductViewPage = () => {
       loadProduct()
       setIsLoading(false)
     } catch (error) {
-      console.log(error)
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      })
       setIsLoading(false)
     }
   }, []);
@@ -107,14 +113,16 @@ const ProductViewPage = () => {
           </Panel>
         </Flex>
 
-        <Flex direction='row' gap='20px'>
-          <Button leftIcon={<MdEdit />} colorScheme='brand' variant='solid' onClick={() => navigate(`/produtos/${productId}/editar`)}>
-            Editar
-          </Button>
-          <Button rightIcon={<IoTrashBin />} colorScheme='brand' variant='outline' onClick={onOpen}>
-            Deletar produto
-          </Button>
-        </Flex>
+        {user.role === 'admin' && (
+          <Flex direction='row' gap='20px'>
+            <Button leftIcon={<MdEdit />} colorScheme='brand' variant='solid' onClick={() => navigate(`/produtos/${productId}/editar`)}>
+              Editar
+            </Button>
+            <Button rightIcon={<IoTrashBin />} colorScheme='brand' variant='outline' onClick={onOpen}>
+              Deletar produto
+            </Button>
+          </Flex>
+        )}
 
         <AlertDialog
           isOpen={isOpen}

@@ -4,13 +4,16 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import Sidebar from '~/components/sidebar';
 
 import routes from '~/routers';
+import { useAuth } from '~/guards/context';
 
 export default function DashboardLayout(props: any) {
   const { children, actions, ...rest } = props;
 
+  const { user } = useAuth()
+
   return (
     <Box>
-      <Sidebar routes={routes} {...rest} />
+      <Sidebar user={user} routes={routes} {...rest} />
       <Box
         float='right'
         minHeight='100vh'

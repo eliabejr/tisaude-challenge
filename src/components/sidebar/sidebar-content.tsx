@@ -7,11 +7,12 @@ import { MdLogout } from 'react-icons/md';
 import Brand from './sidebar-brand';
 import Links from './sidebar-links';
 import { useAuth } from '~/guards/context';
+import { IUser } from '~/interfaces/user';
 
 // FUNCTIONS
 
-function SidebarContent(props: { routes: RoutesType[] }) {
-  const { routes } = props;
+function SidebarContent(props: { user: IUser, routes: RoutesType[] }) {
+  const { routes, user } = props;
   const { signout } = useAuth();
   const textColor = useColorModeValue('secondaryGray.500', 'white');
   // SIDEBAR
@@ -20,7 +21,7 @@ function SidebarContent(props: { routes: RoutesType[] }) {
       <Brand />
       <Stack direction='column' mt='8px' mb='auto'>
         <Box ps='20px' pe={{ lg: '16px', '2xl': '16px' }}>
-          <Links routes={routes} />
+          <Links user={user} routes={routes} />
         </Box>
       </Stack>
       <Box ps='20px' pe={{ lg: '16px', '2xl': '16px' }}>

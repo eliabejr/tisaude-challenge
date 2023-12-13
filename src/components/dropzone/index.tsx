@@ -8,7 +8,7 @@ function CustomDropzone(props: { content: JSX.Element | string;[x: string]: any 
   const bg = useColorModeValue('gray.100', 'navy.700');
   const borderColor = useColorModeValue('secondaryGray.100', 'whiteAlpha.100');
   return (
-    <Dropzone onDrop={(acceptedFiles: any) => console.log(acceptedFiles)}>
+    <Dropzone>
       {({ getRootProps, getInputProps }) => (
         <Flex
           align='center'

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -26,15 +26,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
   const [user, setUser] = useState<ISession | null>(null);
   const navigate = useNavigate()
 
+  async function loadUserInfo() {
+    axios.defaults.headers.Authorization = `Bearer ${Cookies.get('token')}`;
+    const response = await axios.get(endpoints.auth.profile);
+    setUser(response.data)
+    localStorage.setItem("user", response.data);
+  }
+
   const signin = async (email: string, password: string) => {
     const options = { headers: { accept: '*/*', 'Content-Type': 'application/json' } }
     const { data: access_token } = await axios.post(endpoints.auth.login, { email, password }, options);
     if (access_token) {
       const token = access_token.access_token;
       Cookies.set('token', token, { expires: 5 });
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
-      const { data: user } = await axios.get(endpoints.auth.profile);
-      setUser(user);
+      await loadUserInfo()
     }
   };
 
@@ -46,6 +51,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
     return navigate('/login')
   };
 
+  useEffect(() => {
+    const token = Cookies.get('token')
+
+    if (token) {
+      loadUserInfo()
+    }
+  }, []);
 
   return (
     <AuthContext.Provider

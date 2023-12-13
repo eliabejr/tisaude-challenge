@@ -17,6 +17,7 @@ import UserEditPage from './pages/users/user-edit/user-edit-page'
 import UserNewPage from './pages/users/user-new/user-new-page'
 
 import FileUploadPage from './pages/file-upload/file-upload-page'
+import PrivateRoute from './routers/private-route'
 
 function App() {
   console.log('🚀 Última atualização - 12/12/2023')
@@ -31,10 +32,10 @@ function App() {
       <Route path={'/produtos/novo'} element={<ProductNewPage />} />
       <Route path={'/produtos/:productId/editar'} element={<ProductEditPage />} />
 
-      <Route path={'/usuarios'} element={<UsersListPage />} />
-      <Route path={'/usuarios/:userId'} element={<UserViewPage />} />
-      <Route path={'/usuarios/:productId/editar'} element={<UserEditPage />} />
-      <Route path={'/usuarios/novo'} element={<UserNewPage />} />
+      <Route path={'/usuarios'} element={<PrivateRoute roles={['admin']} element={<UsersListPage />} />} />
+      <Route path={'/usuarios/:userId'} element={<PrivateRoute roles={['admin']} element={<UserViewPage />} />} />
+      <Route path={'/usuarios/:productId/editar'} element={<PrivateRoute roles={['admin']} element={<UserEditPage />} />} />
+      <Route path={'/usuarios/novo'} element={<PrivateRoute roles={['admin']} element={<UserNewPage />} />} />
 
       <Route path={'/upload'} element={<FileUploadPage />} />
 
