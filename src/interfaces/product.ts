@@ -24,3 +24,11 @@ export interface IProductDTO {
   categoryId: number,
   images?: string[]
 }
+
+export interface IProductOptions {
+  price?: string | null
+  title?: string | null
+  price_min?: number | null
+  price_max?: number | null
+  categoryId?: number | null
+}
