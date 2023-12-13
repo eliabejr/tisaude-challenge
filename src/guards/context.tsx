@@ -30,7 +30,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
     axios.defaults.headers.Authorization = `Bearer ${Cookies.get('token')}`;
     const response = await axios.get(endpoints.auth.profile);
     setUser(response.data)
-    localStorage.setItem("user", response.data);
   }
 
   const signin = async (email: string, password: string) => {
